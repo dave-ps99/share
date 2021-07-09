@@ -1,0 +1,29 @@
+
+
+
+
+resources:
+  - name: repo
+    type: git
+    source: {url: "https://github.com/dave-ps99/share.git"}
+      
+      
+
+jobs:
+  - name: sharepoint
+    plan:
+      - get: repo
+        trigger: true
+      - task: upload
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: daveps/sp-copy
+              tag: v0.0.8
+        inputs:
+          - name: repo
+        run:
+          path: cat
+          args: ["repo/script.py"]
